@@ -6,7 +6,7 @@ import Task from "./task.tsx";
 const Container = styled.div`
   margin: 8px;
   border: 1px solid lightgrey;
-  border-radius: 2px;
+  border-radius: 12px;
   width: 220px
 
   display: flex;
@@ -23,7 +23,31 @@ const TaskList = styled.div`
   min-height: ;
 `;
 
+const AddItem = styled.div`
+  width: 30px;
+  height: 25px;
+  padding-bottom: 5px;
+  background-color: green;
+  border-width: 0px;
+  border-radius: 100px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 35px;
+  margin: 8px;
+  cursor: pointer;
+`;
+
+export const Input = styled.input`
+  padding: 8px;
+  margin: 8px;
+  border: 1px solid lightgrey;
+  border-radius: 12px;
+`;
+
 export default class Column extends React.Component {
+  state = { inputText: "" };
   render() {
     return (
       <Draggable draggableId={this.props.column.id} index={this.props.index}>
@@ -39,7 +63,13 @@ export default class Column extends React.Component {
                     <div ref={provided.innerRef} {...provided.droppableProps}>
                       <TaskList isDraggingOver={snapshot.isDraggingOver}>
                         {this.props.tasks.map((task, index) => (
-                          <Task key={task.id} task={task} index={index} />
+                          <Task
+                            key={task.id}
+                            task={task}
+                            index={index}
+                            onTaskEdit={this.props.onTaskEdit}
+                            columnId={this.props.column.id}
+                          />
                         ))}
                         {provided.placeholder}
                       </TaskList>
@@ -47,6 +77,11 @@ export default class Column extends React.Component {
                   );
                 }}
               </Droppable>
+              <AddItem
+                onClick={() => this.props.handleClick(this.props.column.id)}
+              >
+                <div>{"+"}</div>
+              </AddItem>
             </Container>
           </div>
         )}

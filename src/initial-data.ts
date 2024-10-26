@@ -8,7 +8,7 @@ const initialData = {
     "column-1": {
       id: "column-1",
       title: "Shopping List",
-      taskIds: ["task-1", "task-2", "task-3"],
+      taskIds: [],
     },
     "column-2": {
       id: "column-2",

@@ -14,6 +14,29 @@ const Container = styled.div`
 class App extends React.Component {
   state = initialData;
 
+  handleClick = (columnId) => {
+    const newItem = { id: `${Math.random() * 10000000}`, content: "" };
+    const tasks = { ...this.state.tasks };
+    tasks[newItem.id] = newItem;
+    const columns = { ...this.state.columns };
+    columns[columnId].taskIds.push(newItem.id);
+    this.setState({ ...this.state, tasks, columns });
+  };
+
+  onTaskEdit = (taskId, newContent, columnId) => {
+    const tasks = { ...this.state.tasks };
+    if (newContent === "") {
+      tasks[taskId] = undefined;
+      const columns = { ...this.state.columns };
+      columns[columnId].taskIds = columns[columnId].taskIds.filter(
+        (id) => id !== taskId
+      );
+      this.setState({ ...this.state, tasks, columns });
+    }
+    tasks[taskId] = { id: taskId, content: newContent };
+    this.setState({ ...this.state, tasks });
+  };
+
   onDragStart = () => {
     document.body.style.color = "orange";
     document.body.style.transition = "background-color 0.2s ease";
@@ -134,6 +157,8 @@ class App extends React.Component {
                       column={column}
                       tasks={tasks}
                       index={index}
+                      handleClick={this.handleClick}
+                      onTaskEdit={this.onTaskEdit}
                     />
                   );
                 })}
